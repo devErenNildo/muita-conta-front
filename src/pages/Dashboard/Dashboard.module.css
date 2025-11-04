@@ -20,18 +20,15 @@
 }
 
 .content {
-    /* Conteúdo principal */
 }
 
 .cardList {
     display: flex;
     flex-wrap: wrap;
     gap: 1.5rem;
-    /* Alinha no centro se não houver espaço suficiente */
     justify-content: center;
 }
 
-/* Em telas maiores, alinha à esquerda */
 @media (min-width: 768px) {
     .cardList {
         justify-content: flex-start;
