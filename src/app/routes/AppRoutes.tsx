@@ -2,6 +2,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import Login from '../../pages/Login';
 import Dashboard from '../../pages/Dashboard';
 import ProtectedRoute from '../../shared/components/ProtectedRoute';
+import MainLayout from '../../shared/components/molecules/MainLayout';
 
 
 function AppRoutes() {
@@ -16,7 +17,9 @@ function AppRoutes() {
           path='/cartao'
           element={
             <ProtectedRoute>
-              <Dashboard/>
+              <MainLayout>
+                <Dashboard/>
+              </MainLayout>
             </ProtectedRoute>
           }
         />

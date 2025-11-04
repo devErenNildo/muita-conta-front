@@ -1,0 +1,46 @@
+.navLink {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem 1rem;
+    text-decoration: none;
+    color: var(--color-text);
+    opacity: 0.7;
+    font-size: 1.1em;
+}
+
+.navLink .icon {
+    font-size: 1.4em;
+}
+
+.navLinkActive {
+    color: var(--color-link);
+    opacity: 1;
+    font-weight: bold;
+}
+
+@media (min-width: 768px) {
+    .asideNav .navLink {
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.75rem 1rem;
+        border-radius: 8px;
+        font-size: 1em;
+    }
+
+    .asideNav .icon {
+        font-size: 1.2em;
+    }
+
+    .asideNav .label {
+        display: block;
+    }
+
+    .asideNav .navLinkActive {
+        background-color: var(--color-link);
+        color: var(--color-background);
+    }
+}
