@@ -4,7 +4,8 @@ import type { AppDispatch, RootState } from '../../app/store';
 import { logout } from '../../features/auth/redux/authSlice';
 import { fetchCartoesThunk } from '../../features/cartao/services/cartaoThunks';
 import CreditCard from '../../shared/components/molecules/CreditCard';
-import styles from './Dashboard.module.css'; // Vamos criar este CSS
+import ThemeToggle from '../../shared/components/molecules/ThemeToggle';
+import styles from './Dashboard.module.css';
 
 const Dashboard = () => {
     const dispatch = useDispatch<AppDispatch>();
@@ -55,9 +56,12 @@ const Dashboard = () => {
         <div className={styles.dashboard}>
             <header className={styles.header}>
                 <h1>Meus Cartões</h1>
-                <button onClick={handleLogout}>
-                    Logout
-                </button>
+                <div>
+                    <ThemeToggle />
+                    <button onClick={handleLogout}>
+                        Logout
+                    </button>
+                </div>
             </header>
             <main className={styles.content}>
                 {renderContent()}
