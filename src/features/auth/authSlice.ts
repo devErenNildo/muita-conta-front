@@ -1,8 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { loginThunk, refreshTokenThunk } from "./authThunks";
-import type { AuthState } from "./types";
+import type { AuthResponse, AuthState } from "./types";
 
-const initialState: AuthState = {
+const defaultInitialState: AuthState = {
     accessToken: null,
     refreshToken: null,
     expiresIn: null,
@@ -10,6 +10,33 @@ const initialState: AuthState = {
     loading: false,
     error: null,
 };
+
+const loadAuthFromStorage = (): AuthState => {
+    try {
+        const serializedAuth = localStorage.getItem("auth");
+        if (serializedAuth === null) {
+            return defaultInitialState;
+        }
+
+        const authData = JSON.parse(serializedAuth) as AuthResponse;
+
+        return {
+            accessToken: authData.accessToken,
+            refreshToken: authData.refreshToken,
+            expiresIn: authData.expiresIn,
+            isAuthenticated: true,
+            loading: false,
+            error: null,
+        }
+
+    } catch (e) {
+        console.warn("Falha ao carregar o estado de 'auth' do localStorage", e);
+        localStorage.removeItem("auth"); 
+        return defaultInitialState;
+    }
+}
+
+const initialState: AuthState = loadAuthFromStorage();
 
 const authSlice = createSlice({
     name: "auth",

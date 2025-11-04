@@ -1,14 +1,34 @@
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import './App.css'
-import Login from './pages/Login'
+import Login from './pages/Login';
+import Dashboard from './pages/Dashboard';
+import ProtectedRoute from './components/ProtectedRoute';
+
 
 function App() {
   return (
-    <>
-      <h1>Meu App com Login</h1>
-      <div className="card">
-        <Login />
-      </div>
-    </>
+    <BrowserRouter>
+      <Routes>
+        <Route
+          path='/login'
+          element={<Login />}
+        />
+
+        <Route
+          path='/cartao'
+          element={
+            <ProtectedRoute>
+              <Dashboard/>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route 
+          path="*" 
+          element={<Navigate to="/cartao" replace />} 
+        />
+      </Routes>
+    </BrowserRouter>
   )
 }
 

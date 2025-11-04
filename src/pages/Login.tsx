@@ -3,24 +3,35 @@ import { useDispatch, useSelector } from 'react-redux';
 import type { AppDispatch, RootState } from '../app/store';
 import { loginThunk } from '../features/auth/authThunks';
 
+import { useNavigate, useLocation, Navigate } from 'react-router-dom';
+
 const Login = () => {
     const [email, setEmail] = useState('');
     const [senha, setSenha] = useState('');
 
-    // Hooks do Redux
     const dispatch = useDispatch<AppDispatch>();
-
     const { loading, error, isAuthenticated } = useSelector(
         (state: RootState) => state.auth
     );
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const navigate = useNavigate();
+    const location = useLocation();
+    const from = location.state?.from?.pathname || '/dashboard';
+
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        dispatch(loginThunk({ email, senha }));
+        try {
+            await dispatch(loginThunk({ email, senha })).unwrap();
+
+            navigate(from, { replace: true });
+
+        } catch (err) {
+            console.error("Falha no login: ", err);
+        }
     };
 
     if (isAuthenticated) {
-        return <div>Você está logado!</div>;
+        return <Navigate to={from} replace />;
     }
 
     return (
