@@ -1,0 +1,39 @@
+.dashboard {
+    width: 100%;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 2rem;
+    text-align: left;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2.5rem;
+}
+
+.header h1 {
+    font-size: 2.5em;
+    line-height: 1.1;
+    margin: 0;
+}
+
+.content {
+    /* Conteúdo principal */
+}
+
+.cardList {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    /* Alinha no centro se não houver espaço suficiente */
+    justify-content: center;
+}
+
+/* Em telas maiores, alinha à esquerda */
+@media (min-width: 768px) {
+    .cardList {
+        justify-content: flex-start;
+    }
+}

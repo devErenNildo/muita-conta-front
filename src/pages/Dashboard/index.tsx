@@ -1,28 +1,99 @@
+// import { useDispatch, useSelector } from 'react-redux';
+// import type { AppDispatch, RootState } from '../../app/store';
+// import { logout } from '../../features/auth/redux/authSlice';
+// import { Navigate } from 'react-router-dom';
+
+// const Dashboard = () => {
+//     const dispatch = useDispatch<AppDispatch>();
+
+//     const { isAuthenticated } = useSelector((state: RootState) => state.auth);
+
+//     const handleLogout = () => {
+//         dispatch(logout());
+//     };
+
+//     if (!isAuthenticated) {
+//         return <Navigate to="/login" replace />;
+//     }
+
+//     return (
+//         <div>
+//             <h1>Página Logada (Dashboard)</h1>
+//             <p>Você está autenticado com sucesso.</p>
+//             <button onClick={handleLogout}>
+//                 Logout
+//             </button>
+//         </div>
+//     );
+// };
+
+// export default Dashboard;
+
+
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import type { AppDispatch, RootState } from '../../app/store';
 import { logout } from '../../features/auth/redux/authSlice';
-import { Navigate } from 'react-router-dom';
+import { fetchCartoesThunk } from '../../features/cartao/services/cartaoThunks';
+import CreditCard from '../../shared/components/molecules/CreditCard';
+import styles from './Dashboard.module.css'; // Vamos criar este CSS
 
 const Dashboard = () => {
     const dispatch = useDispatch<AppDispatch>();
 
-    const { isAuthenticated } = useSelector((state: RootState) => state.auth);
+    // Seletores do Cartao
+    const { cartoes, loading, error } = useSelector(
+        (state: RootState) => state.cartao
+    );
+
+    // Buscar cartões ao carregar a página
+    useEffect(() => {
+        dispatch(fetchCartoesThunk());
+    }, [dispatch]);
 
     const handleLogout = () => {
         dispatch(logout());
     };
 
-    if (!isAuthenticated) {
-        return <Navigate to="/login" replace />;
-    }
+    const renderContent = () => {
+        if (loading) {
+            return <p>Carregando cartões...</p>;
+        }
+
+        if (error) {
+            return <p style={{ color: 'red' }}>Erro ao carregar cartões: {error}</p>;
+        }
+
+        if (cartoes.length === 0) {
+            return <p>Nenhum cartão encontrado.</p>;
+        }
+
+        // Renderiza a lista de cartões
+        return (
+            <div className={styles.cardList}>
+                {cartoes.map((cartao) => (
+                    <CreditCard
+                        key={cartao.id}
+                        nome={cartao.nome}
+                        limiteDisponivel={cartao.limiteDisponivel}
+                        cor={cartao.cor}
+                    />
+                ))}
+            </div>
+        );
+    };
 
     return (
-        <div>
-            <h1>Página Logada (Dashboard)</h1>
-            <p>Você está autenticado com sucesso.</p>
-            <button onClick={handleLogout}>
-                Logout
-            </button>
+        <div className={styles.dashboard}>
+            <header className={styles.header}>
+                <h1>Meus Cartões</h1>
+                <button onClick={handleLogout}>
+                    Logout
+                </button>
+            </header>
+            <main className={styles.content}>
+                {renderContent()}
+            </main>
         </div>
     );
 };
