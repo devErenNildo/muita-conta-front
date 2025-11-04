@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux';
-import type { AppDispatch, RootState } from '../app/store';
-import { logout } from '../features/auth/authSlice';
+import type { AppDispatch, RootState } from '../../app/store';
+import { logout } from '../../features/auth/redux/authSlice';
 import { Navigate } from 'react-router-dom';
 
 const Dashboard = () => {

@@ -1,13 +1,11 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import './App.css'
-import Login from './pages/Login';
-import Dashboard from './pages/Dashboard';
-import ProtectedRoute from './components/ProtectedRoute';
+import { Routes, Route, Navigate } from 'react-router-dom';
+import Login from '../../pages/Login';
+import Dashboard from '../../pages/Dashboard';
+import ProtectedRoute from '../../shared/components/ProtectedRoute';
 
 
-function App() {
+function AppRoutes() {
   return (
-    <BrowserRouter>
       <Routes>
         <Route
           path='/login'
@@ -28,8 +26,7 @@ function App() {
           element={<Navigate to="/cartao" replace />} 
         />
       </Routes>
-    </BrowserRouter>
   )
 }
 
-export default App
+export default AppRoutes

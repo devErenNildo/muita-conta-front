@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import type { AppDispatch, RootState } from '../app/store';
-import { loginThunk } from '../features/auth/authThunks';
+import type { AppDispatch, RootState } from '../../app/store';
+import { loginThunk } from '../../features/auth/services/authThunks'
 
 import { useNavigate, useLocation, Navigate } from 'react-router-dom';
 
