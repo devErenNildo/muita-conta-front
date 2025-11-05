@@ -2,7 +2,12 @@ import { NavLink } from "react-router-dom";
 import styles from "./NavLinks.module.css";
 
 const navItems = [
+    { path: '/visao-geral', label: 'Visão Geral', icon: '📊' },
+    { path: '/despesas', label: 'Despesas', icon: '📈' },
     { path: '/cartao', label: 'Cartões', icon: '💳' },
+    { path: '/contas', label: 'Contas', icon: '📄' },
+    { path: '/emprestimos', label: 'Empréstimos', icon: '💰' },
+    { path: '/renda', label: 'Renda', icon: '📉' },
     { path: '/perfil', label: 'Perfil', icon: '👤' },
 ];
 
