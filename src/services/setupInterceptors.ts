@@ -9,7 +9,11 @@ export const setupInterceptors = (store: EnhancedStore) => {
 
     api.interceptors.request.use((config) => {
         const token = (store.getState() as RootState).auth.accessToken;
-        if (token) {
+
+        const endPointsAuth = /^\/?auth\//.test(config.url ?? "");
+
+
+        if (token && !endPointsAuth) {
             config.headers.Authorization = `Bearer ${token}`;
         }
         return config;

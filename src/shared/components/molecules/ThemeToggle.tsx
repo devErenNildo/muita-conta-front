@@ -11,10 +11,13 @@ const ThemeToggle = () => {
     };
 
     const nextTheme = mode === 'light' ? 'Escuro' : 'Claro';
+    const icon = mode === 'light' ? '🌙' : '☀️';
+    const label = `Mudar para ${nextTheme}`;
 
     return (
-        <button onClick={handleToggle} title={`Mudar para tema ${nextTheme}`}>
-            {mode === 'light' ? '🌙' : '☀️'}
+        <button onClick={handleToggle} title={label}>
+            <span className="theme-icon">{icon}</span>
+            <span className="theme-label">{label}</span>
         </button>
     );
 };

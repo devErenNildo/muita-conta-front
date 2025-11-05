@@ -11,12 +11,12 @@ export const loginThunk = createAsyncThunk(
 );
 
 export const refreshTokenThunk = createAsyncThunk(
-    "auth/refresh",
+    "auth/refresh-token",
     async (_, { getState }) => {
         const state: any = getState();
         const refreshToken = state.auth.refreshToken;
 
-        const { data } = await api.post<AuthResponse>("/auth/refresh", {
+        const { data } = await api.post<AuthResponse>("/auth/refresh-token", {
             refreshToken,
         });
 

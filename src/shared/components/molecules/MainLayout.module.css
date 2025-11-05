@@ -47,28 +47,113 @@
         left: 0;
         height: 100vh;
         padding: 1.5rem;
-        background-color: var(--color-button-bg);
-        border-right: 1px solid var(--color-link-hover);
+        background-color: #0d1a2e; 
+        border-right: 1px solid #1a2b44;
+        color: #FFFFFF;
     }
 
     .asideLogo {
-        font-size: 1.5em;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
         padding-bottom: 2rem;
+        flex-shrink: 0; 
     }
+
+    .logoIcon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 8px;
+        background-color: #007bff; 
+        font-size: 1.5em;
+        font-weight: bold;
+        color: #FFFFFF;
+    }
+    
+    .logoTextContainer {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .logoTitle {
+        font-size: 1.2em; 
+        font-weight: bold;
+        margin: 0;
+        line-height: 1.2;
+        color: #FFFFFF;
+    }
+    
+    .logoSubtitle {
+        font-size: 0.85em;
+        opacity: 0.8;
+    }
+
 
     .asideLinks {
         display: flex;
         flex-direction: column;
         gap: 0.5rem;
+        flex-grow: 1;
+        overflow-y: auto;
     }
 
-    .asideNav .icon {
+    .asideNav .icon,
+    .asideNav .theme-icon,
+    .asideNav .footerIcon {
         font-size: 1.2em;
     }
 
-    .asideNav .label {
+    .asideNav .label,
+    .asideNav .theme-label,
+    .asideNav .footerLabel {
         display: block;
     }
+
+    .asideFooter {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        padding-top: 1rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        flex-shrink: 0;
+    }
+
+    .asideFooter > button,
+    .footerLink {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.75rem 1rem;
+        border-radius: 8px;
+        font-size: 1em;
+        text-decoration: none;
+        color: rgba(255, 255, 255, 0.8);
+        
+        background: none;
+        border: none;
+        cursor: pointer;
+        width: 100%;
+        font-family: inherit;
+        text-align: left;
+    }
+
+    .asideFooter > button:hover,
+    .footerLink:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+        color: #FFFFFF;
+    }
+    
+    .footerLinkActive {
+        background-color: var(--color-link);
+        color: #FFFFFF !important;
+        font-weight: bold;
+    }
+
 
     .bottomNav {
         display: none;
@@ -77,7 +162,6 @@
     .mainContent {
         padding-bottom: 0;
         flex-grow: 1;
-
         margin-left: 240px;
     }
 }
