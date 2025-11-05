@@ -14,29 +14,29 @@
     --color-link: #646cff;
     --color-link-hover: #747bff;
 
-    --color-nav-glass-bg: rgba(255, 255, 255, 0.5);
-    --color-nav-border: rgba(0, 0, 0, 0.1);
+    --color-nav-glass-bg: rgba(255, 255, 255, 0.2);
+    --color-nav-border: rgba(255, 255, 255, 0.37);
     --color-nav-icon-inactive: #555555;
     --color-nav-icon-active: var(--color-link);
-    --color-nav-active-bg: rgba(100, 108, 255, 0.2);
-    --color-nav-active-border: rgba(100, 108, 255, 0.3);
-    --color-nav-active-shadow: rgba(100, 108, 255, 0.3);
+    --color-nav-active-bg: rgba(255, 255, 255, 0.5);
+    --color-nav-active-border: rgba(255, 255, 255, 0.3);
+    --color-nav-active-shadow: rgba(0, 0, 0, 0.05);
 }
 
 [data-theme="dark"] {
     --color-text: rgba(255, 255, 255, 0.87);
     --color-background: #242424;
     --color-button-bg: #1a1a1a;
-    --color-link: #646cff;
+    --color-link: #868cfd;
     --color-link-hover: #535bf2;
 
-    --color-nav-glass-bg: rgba(40, 40, 40, 0.3);
-    --color-nav-border: rgba(255, 255, 255, 0.1);
+    --color-nav-glass-bg: rgba(20, 25, 45, 0.35);
+    --color-nav-border: rgba(255, 255, 255, 0.212);
     --color-nav-icon-inactive: rgba(255, 255, 255, 0.7);
     --color-nav-icon-active: var(--color-link);
-    --color-nav-active-bg: rgba(100, 108, 255, 0.25);
-    --color-nav-active-border: rgba(100, 108, 255, 0.4);
-    --color-nav-active-shadow: rgba(100, 108, 255, 0.3);
+    --color-nav-active-bg: rgba(0, 0, 0, 0.25);
+    --color-nav-active-border: rgba(255, 255, 255, 0.1);
+    --color-nav-active-shadow: rgba(0, 0, 0, 0.1);
 }
 
 body {
