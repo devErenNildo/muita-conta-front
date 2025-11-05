@@ -1,14 +1,25 @@
 import { NavLink } from "react-router-dom";
 import styles from "./NavLinks.module.css";
+import {
+    LuFileText,
+    LuPiggyBank,
+    LuUser 
+} from "react-icons/lu";
+import {
+    MdOutlineDashboard,
+    MdTrendingDown,
+    MdCreditCard,
+    MdTrendingUp,
+} from "react-icons/md";
 
 const navItems = [
-    { path: '/visao-geral', label: 'Visão Geral', icon: '📊' },
-    { path: '/despesas', label: 'Despesas', icon: '📈' },
-    { path: '/cartao', label: 'Cartões', icon: '💳' },
-    { path: '/contas', label: 'Contas', icon: '📄' },
-    { path: '/emprestimos', label: 'Empréstimos', icon: '💰' },
-    { path: '/renda', label: 'Renda', icon: '📉' },
-    { path: '/perfil', label: 'Perfil', icon: '👤' },
+    { path: '/visao-geral', label: 'Visão Geral', icon: <MdOutlineDashboard /> },
+    { path: '/despesas', label: 'Despesas', icon: <MdTrendingDown /> },
+    { path: '/cartao', label: 'Cartões', icon: <MdCreditCard /> },
+    { path: '/contas', label: 'Contas', icon: <LuFileText /> },
+    { path: '/emprestimos', label: 'Empréstimos', icon: <LuPiggyBank /> },
+    { path: '/renda', label: 'Renda', icon: <MdTrendingUp /> },
+    { path: '/perfil', label: 'Perfil', icon: <LuUser /> },
 ];
 
 const NavLinks = () => {

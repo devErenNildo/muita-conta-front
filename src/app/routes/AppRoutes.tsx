@@ -1,6 +1,7 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import Login from '../../pages/Login';
 import Dashboard from '../../pages/Dashboard';
+import Profile from '../../pages/Profile';
 import ProtectedRoute from '../../shared/components/ProtectedRoute';
 import MainLayout from '../../shared/components/molecules/MainLayout';
 
@@ -19,6 +20,17 @@ function AppRoutes() {
             <ProtectedRoute>
               <MainLayout>
                 <Dashboard/>
+              </MainLayout>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path='/perfil'
+          element={
+            <ProtectedRoute>
+              <MainLayout>
+                <Profile />
               </MainLayout>
             </ProtectedRoute>
           }
