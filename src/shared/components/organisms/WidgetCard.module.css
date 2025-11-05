@@ -1,0 +1,107 @@
+.widgetCard {
+    background-color: var(--color-background);
+    border: 1px solid var(--color-nav-border);
+    border-radius: 16px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.title {
+    font-size: 1.2em;
+    font-weight: 600;
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    color: var(--color-text);
+}
+
+.stateMessage {
+    min-height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.7;
+    font-style: italic;
+}
+
+.tabContainer {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    background-color: var(--color-button-bg);
+    border-radius: 10px;
+    padding: 0.25rem;
+}
+
+.tab {
+    flex: 1;
+    padding: 0.75rem 0.5rem;
+    border: none;
+    border-radius: 8px;
+    background-color: transparent;
+    color: var(--color-text);
+    opacity: 0.7;
+    font-weight: 500;
+    font-size: 0.9em;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.tabActive {
+    background-color: var(--color-background);
+    color: var(--color-link);
+    opacity: 1;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.purchaseList {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.purchaseItem {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.5rem 0;
+}
+
+.itemIcon {
+    font-size: 1.5em;
+    background-color: var(--color-button-bg);
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.itemDetails {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.itemDesc {
+    font-weight: 500;
+    color: var(--color-text);
+}
+
+.itemDate {
+    font-size: 0.9em;
+    opacity: 0.7;
+}
+
+.itemValue {
+    font-weight: 600;
+    font-size: 1.1em;
+}

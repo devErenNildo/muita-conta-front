@@ -1,20 +1,30 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchCartoesThunk } from "../services/cartaoThunks";
+import { fetchCartoesThunk, fetchDespesasThunk } from "../services/cartaoThunks";
 import type { CartaoState } from "../types";
 
 const initialState: CartaoState = {
     cartoes: [],
     loading: false,
     error: null,
+    despesas: [],
+    loadingDespesas: false,
+    errorDespesas: null,
 };
+
+
 
 const cartaoSlice = createSlice({
     name: "cartao",
     initialState,
     reducers: {
+        clearDespesas: (state) => {
+            state.despesas = [];
+            state.errorDespesas = null;
+        }
     },
     extraReducers: (builder) => {
         builder
+            // REDUCER CARTÃO 
             .addCase(fetchCartoesThunk.pending, (state) => {
                 state.loading = true;
                 state.error = null;
@@ -26,8 +36,23 @@ const cartaoSlice = createSlice({
             .addCase(fetchCartoesThunk.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.error.message ?? "Erro ao buscar cartões.";
+            })
+            // REDUCER DESPESAS
+            .addCase(fetchDespesasThunk.pending, (state) => {
+                state.loadingDespesas = true;
+                state.errorDespesas = null;
+            })
+            .addCase(fetchDespesasThunk.fulfilled, (state, action) => {
+                state.loadingDespesas = false;
+                state.despesas = action.payload;
+            })
+            .addCase(fetchDespesasThunk.rejected, (state, action) => {
+                state.loadingDespesas = false;
+                state.errorDespesas = action.error.message ?? "Erro ao buscar despesas.";
             });
     },
 });
+
+export const { clearDespesas } = cartaoSlice.actions;
 
 export default cartaoSlice.reducer;

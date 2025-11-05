@@ -34,10 +34,6 @@
     z-index: 1000;
 }
 
-.bottomNav .label {
-    display: none;
-}
-
 .mainContent {
     flex-grow: 1;
     padding-bottom: 80px;
@@ -60,9 +56,11 @@
         height: 100vh;
         padding: 1.5rem;
         box-sizing: border-box;
-        background-color: #0d1a2e; 
-        border-right: 1px solid #1a2b44;
-        color: #FFFFFF;
+        background-color: var(--color-nav-glass-bg);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-right: 1px solid var(--color-nav-border);
+        color: var(--color-text);
     }
 
     .asideLogo {
@@ -96,7 +94,7 @@
         font-weight: bold;
         margin: 0;
         line-height: 1.2;
-        color: #FFFFFF;
+        color: var(--color-text);
     }
     
     .logoSubtitle {
@@ -119,10 +117,10 @@
         font-size: 1.2em;
     }
 
-    .asideNav .label,
-    .asideNav .theme-label,
-    .asideNav .footerLabel {
-        display: block;
+    .asideNav .icon,
+    .asideNav .theme-icon,
+    .asideNav .footerIcon {
+        font-size: 1.2em;
     }
 
     .asideFooter {
@@ -145,8 +143,7 @@
         border-radius: 8px;
         font-size: 1em;
         text-decoration: none;
-        color: rgba(255, 255, 255, 0.8);
-        
+        color: var(--color-nav-icon-inactive); 
         background: none;
         border: none;
         cursor: pointer;
@@ -157,14 +154,15 @@
 
     .asideFooter > button:hover,
     .footerLink:hover {
-        background-color: rgba(255, 255, 255, 0.1);
-        color: #FFFFFF;
+        background-color: var(--color-nav-active-bg);
+        color: var(--color-nav-icon-active);
     }
     
     .footerLinkActive {
-        background-color: var(--color-link);
-        color: #FFFFFF !important;
-        font-weight: bold;
+        background-color: var(--color-nav-active-bg);
+        color: var(--color-nav-icon-active) !important;
+        font-weight: 500;
+        box-shadow: 0 2px 8px var(--color-nav-active-shadow);
     }
 
 

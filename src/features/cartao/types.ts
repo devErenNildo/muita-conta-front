@@ -1,3 +1,11 @@
+export type Despesa = {
+    descricao: string;
+    valor: number;
+    data: string;
+    numeroParcelas: number;
+    parcelaAtual: number;
+};
+
 export type Cartao = {
     id: number;
     nome: string;
@@ -12,4 +20,8 @@ export type CartaoState = {
     cartoes: Cartao[];
     loading: boolean;
     error: string | null;
+
+    despesas: Despesa[];
+    loadingDespesas: boolean;
+    errorDespesas: string | null;
 };

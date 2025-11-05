@@ -1,0 +1,48 @@
+.cardCarousel {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.5rem;
+}
+
+.cardWrapper {
+    width: 300px;
+    height: 180px;
+    overflow: hidden; 
+}
+
+.cardState {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 300px;
+    height: 180px;
+    border-radius: 12px;
+    background-color: var(--color-button-bg);
+    color: var(--color-text);
+    font-size: 0.9em;
+    padding: 1rem;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+.navButton {
+    background-color: var(--color-button-bg);
+    border: 1px solid var(--color-nav-border);
+    color: var(--color-text);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 1.2em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s, border-color 0.2s;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.navButton:hover {
+    border-color: var(--color-link);
+}

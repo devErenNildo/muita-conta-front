@@ -1,15 +1,14 @@
 .dashboard {
     width: 100%;
-    max-width: 1280px;
-    margin: 0 auto;
-    padding: 2rem;
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 2rem; 
     text-align: left;
+    box-sizing: border-box;
 }
 
 .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
     margin-bottom: 2.5rem;
 }
 
@@ -19,23 +18,79 @@
     margin: 0;
 }
 
-.headerActions {
-    display: flex;
-    gap: 1rem;
+.header p {
+    font-size: 1.1em;
+    color: var(--color-text);
+    opacity: 0.7;
+    margin: 0.25rem 0 0 0;
 }
 
-.content {
+.contentLayout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
 }
 
-.cardList {
+.mainContent {
     display: flex;
-    flex-wrap: wrap;
-    gap: 1.5rem;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.fab {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: var(--color-link);
+    color: white;
+    font-size: 2em;
+    font-weight: 300;
+    line-height: 1;
+
+    display: flex;
+    align-items: center;
     justify-content: center;
+
+    border: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    z-index: 1000;
 }
 
-@media (min-width: 768px) {
-    .cardList {
-        justify-content: flex-start;
+.fab:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+}
+
+@media (min-width: 992px) {
+    .contentLayout {
+        grid-template-columns: 2fr 1fr;
+    }
+
+    .mainContent {
+        order: 1;
+    }
+
+    .contentLayout> :nth-child(2) {
+        order: 2;
+        align-self: flex-start;
+        position: sticky;
+        top: 2rem;
+    }
+
+    .fab {
+        bottom: 2.5rem;
+        right: 2.5rem;
+    }
+}
+
+@media (max-width: 767px) {
+    .fab {
+        bottom: 100px;
     }
 }

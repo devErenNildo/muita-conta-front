@@ -1,66 +1,80 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import type { AppDispatch, RootState } from '../../app/store';
-import { logout } from '../../features/auth/redux/authSlice';
-import { fetchCartoesThunk } from '../../features/cartao/services/cartaoThunks';
-import CreditCard from '../../shared/components/molecules/CreditCard';
+import { fetchCartoesThunk, fetchDespesasThunk } from '../../features/cartao/services/cartaoThunks';
 import styles from './Dashboard.module.css';
+import { clearDespesas } from '../../features/cartao/redux/cartaoSlice';
+import InvoiceHistory from '../../shared/components/organisms/InvoiceHistory';
+import CardPurchases from '../../shared/components/organisms/CardPurchases';
+import CardDetailsSidebar from '../../shared/components/organisms/CardDetailsSidebar';
 
 const Dashboard = () => {
     const dispatch = useDispatch<AppDispatch>();
+    
+    const [currentIndex, setCurrentIndex] = useState(0);
 
-    const { cartoes, loading, error } = useSelector(
-        (state: RootState) => state.cartao
-    );
+    const { 
+        cartoes, 
+        loading: loadingCartoes, 
+        error: errorCartoes,
+        despesas,
+        loadingDespesas,
+        errorDespesas 
+    } = useSelector((state: RootState) => state.cartao);
 
     useEffect(() => {
         dispatch(fetchCartoesThunk());
     }, [dispatch]);
 
-    const handleLogout = () => {
-        dispatch(logout());
-    };
+    useEffect(() => {
+        setCurrentIndex(0);
+    }, [cartoes.length]);
 
-    const renderContent = () => {
-        if (loading) {
-            return <p>Carregando cartões...</p>;
+    useEffect(() => {
+        const activeCard = cartoes.length > 0 ? cartoes[currentIndex] : null;
+
+        if (activeCard) {
+            const date = new Date();
+            const mes = date.getMonth() + 1; 
+            const ano = date.getFullYear();
+
+            dispatch(fetchDespesasThunk({ idCartao: activeCard.id, mes, ano }));
+        } else {
+            dispatch(clearDespesas());
         }
 
-        if (error) {
-            return <p style={{ color: 'red' }}>Erro ao carregar cartões: {error}</p>;
-        }
-
-        if (cartoes.length === 0) {
-            return <p>Nenhum cartão encontrado.</p>;
-        }
-
-        return (
-            <div className={styles.cardList}>
-                {cartoes.map((cartao) => (
-                    <CreditCard
-                        key={cartao.id}
-                        nome={cartao.nome}
-                        limiteDisponivel={cartao.limiteDisponivel}
-                        cor={cartao.cor}
-                    />
-                ))}
-            </div>
-        );
-    };
+    }, [dispatch, cartoes, currentIndex]);
 
     return (
         <div className={styles.dashboard}>
             <header className={styles.header}>
-                <h1>Meus Cartões</h1>
-                <div className={styles.headerActions}> 
-                    <button onClick={handleLogout}>
-                        Logout
-                    </button>
-                </div>
+                <h1>Cartões</h1>
+                <p>Gerencie seus cartões de crédito e compras</p>
             </header>
-            <main className={styles.content}>
-                {renderContent()}
-            </main>
+            
+            <div className={styles.contentLayout}>
+                <main className={styles.mainContent}>
+                    <InvoiceHistory />
+                    <CardPurchases
+                        despesas={despesas}
+                        loading={loadingDespesas}
+                        error={errorDespesas}
+                    />
+                </main>
+                
+                <CardDetailsSidebar
+                    cartoes={cartoes} 
+                    loading={loadingCartoes} 
+                    error={errorCartoes}
+                    
+                    currentIndex={currentIndex}
+                    onIndexChange={setCurrentIndex}
+                />
+            </div>
+
+            <button className={styles.fab} aria-label="Adicionar">
+                +
+            </button>
         </div>
     );
 };
