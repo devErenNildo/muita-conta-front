@@ -23,8 +23,13 @@ const CardNetworkIcon = () => (
 
 const CreditCard = ({ cartao }: Props) => {
 
+    const fallbackBackground = 'linear-gradient(135deg, #007BFF, #0056B3)';
+
     const cardStyle = {
-        backgroundColor: cartao.cor || '#007BFF',
+        // Altere de 'backgroundColor' para 'background'
+        // Se 'cartao.cor' existir, ele será usado.
+        // Se não, ele usará o gradiente azul como fallback.
+        background: cartao.cor || fallbackBackground,
     };
 
     return (
