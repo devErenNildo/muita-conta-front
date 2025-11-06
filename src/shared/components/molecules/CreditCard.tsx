@@ -1,53 +1,66 @@
 import styles from './CreditCard.module.css';
 import type { Cartao } from '../../../features/cartao/types';
+import BarradeProgresso from '../atoms/BarraDeProgresso';
 
 type Props = {
     cartao: Cartao;
 };
 
-const CardChipIcon = () => (
-    <svg width="40" height="30" viewBox="0 0 40 30" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect width="40" height="30" rx="4" fill="#D1D1D1" fillOpacity="0.5" />
-        <path d="M14 0V30" stroke="#FFF" strokeOpacity="0.3" strokeWidth="2" />
-        <path d="M26 0V30" stroke="#FFF" strokeOpacity="0.3" strokeWidth="2" />
-        <path d="M0 15H40" stroke="#FFF" strokeOpacity="0.3" strokeWidth="2" />
-    </svg>
-);
+const formatCurrency = (value: number) => {
+    return new Intl.NumberFormat('pt-BR', {
+        style: 'currency',
+        currency: 'BRL',
+    }).format(value);
+};
 
-const CardNetworkIcon = () => (
-    <svg width="44" height="28" viewBox="0 0 44 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="14" cy="14" r="14" fill="#EB001B" fillOpacity="0.8" />
-        <circle cx="30" cy="14" r="14" fill="#F79E1B" fillOpacity="0.7" />
+const CardIcon = () => (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+        <line x1="1" y1="10" x2="23" y2="10"></line>
     </svg>
 );
 
 const CreditCard = ({ cartao }: Props) => {
 
     const fallbackBackground = 'linear-gradient(135deg, #007BFF, #0056B3)';
-
     const cardStyle = {
-        // Altere de 'backgroundColor' para 'background'
-        // Se 'cartao.cor' existir, ele será usado.
-        // Se não, ele usará o gradiente azul como fallback.
         background: cartao.cor || fallbackBackground,
     };
 
+    const limiteUsado = cartao.limite - cartao.limiteDisponivel;
+    const percent = cartao.limite > 0 ? Math.min((limiteUsado / cartao.limite) * 100, 100) : 0;
+
     return (
         <div className={styles.card} style={cardStyle}>
-            <div className={styles.cardHeader}>
-                <span className={styles.cardType}>Cartão de Crédito</span>
-                <span className={styles.cardNetworkName}>{cartao.nome}</span>
+            
+            <div className={styles.header}>
+                <span className={styles.icon}><CardIcon /></span>
+                <span>{cartao.nome}</span>
             </div>
 
-            <div className={styles.cardChip}>
-                <CardChipIcon />
-            </div>
-
-            <div className={styles.cardFooter}>
-                <div className={styles.cardNetworkIcon}>
-                    <CardNetworkIcon />
+            <div className={styles.infoList}>
+                <div className={styles.infoRow}>
+                    <span className={styles.label}>Limite total</span>
+                    <span className={styles.value}>{formatCurrency(cartao.limite)}</span>
+                </div>
+                <div className={styles.infoRow}>
+                    <span className={styles.label}>Usado</span>
+                    <span className={styles.value}>{formatCurrency(limiteUsado)}</span>
+                </div>
+                <div className={styles.infoRow}>
+                    <span className={styles.label}>Disponível</span>
+                    <span className={styles.value}>{formatCurrency(cartao.limiteDisponivel)}</span>
                 </div>
             </div>
+
+            <div className={styles.limitSection}>
+                <div className={styles.limitHeader}>
+                    <span className={styles.label}>Uso do limite</span>
+                    <span className={styles.value}>{percent.toFixed(1)}%</span>
+                </div>
+                <BarradeProgresso percent={percent}/>
+            </div>
+
         </div>
     );
 };

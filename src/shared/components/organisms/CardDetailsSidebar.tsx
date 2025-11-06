@@ -1,6 +1,5 @@
 import type { Cartao } from '../../../features/cartao/types';
 import CreditCard from '../molecules/CreditCard';
-import LimitUsageBar from '../molecules/LimitUsageBar';
 import InfoBox from '../atoms/InfoBox';
 import styles from './CardDetailsSidebar.module.css';
 
@@ -39,11 +38,9 @@ const CardDetailsSidebar = ({
         }
 
         const currentCard = cartoes[currentIndex];
-        const limiteUsado = currentCard.limite - currentCard.limiteDisponivel;
 
         return (
             <>
-                <LimitUsageBar usado={limiteUsado} total={currentCard.limite} />
                 <div className={styles.infoGrid}>
                     <InfoBox label="Fecha dia" value={currentCard.diaFechamento} />
                     <InfoBox label="Vence dia" value={currentCard.diaVencimento} />
