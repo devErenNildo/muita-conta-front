@@ -6,7 +6,13 @@ const initialState: CartaoState = {
     cartoes: [],
     loading: false,
     error: null,
-    despesas: [],
+    despesas: {
+        content: [],
+        currentPage: 0,
+        pageSize: 0,
+        totalPages: 0,
+        totalElements: 0,
+    },
     loadingDespesas: false,
     errorDespesas: null,
 };
@@ -18,7 +24,7 @@ const cartaoSlice = createSlice({
     initialState,
     reducers: {
         clearDespesas: (state) => {
-            state.despesas = [];
+            state.despesas = initialState.despesas;
             state.errorDespesas = null;
         }
     },
