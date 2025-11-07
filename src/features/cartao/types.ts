@@ -1,3 +1,5 @@
+import type { PaginatedResponse } from "../../shared/types";
+
 export type Despesa = {
     descricao: string;
     valor: number;
@@ -16,12 +18,24 @@ export type Cartao = {
     cor: string;
 };
 
+// export type CartaoState = {
+//     cartoes: Cartao[];
+//     loading: boolean;
+//     error: string | null;
+
+//     despesas: Despesa[];
+//     loadingDespesas: boolean;
+//     errorDespesas: string | null;
+// };
+
+export type DespesasResponse = PaginatedResponse<Despesa>;
+
 export type CartaoState = {
     cartoes: Cartao[];
     loading: boolean;
     error: string | null;
 
-    despesas: Despesa[];
+    despesas: DespesasResponse; 
     loadingDespesas: boolean;
     errorDespesas: string | null;
-};
+}
