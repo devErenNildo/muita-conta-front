@@ -16,7 +16,7 @@ const initialState: CartaoState = {
     loadingDespesas: false,
     errorDespesas: null,
 
-    faturasSimples: {
+    faturasSimples: { 
         content: [],
         currentPage: 0,
         pageSize: 0,
@@ -71,10 +71,6 @@ const cartaoSlice = createSlice({
                 state.errorDespesas = action.error.message ?? "Erro ao buscar despesas.";
             })
             // REDUCER FATURAS SIMPLES
-            .addCase(fetchFaturasSimplesThunk.pending, (state) => {
-                state.loadingFaturas = true;
-                state.errorFaturas = null;
-            })
             .addCase(fetchFaturasSimplesThunk.pending, (state) => {
                 state.loadingFaturas = true;
                 state.errorFaturas = null;
