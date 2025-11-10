@@ -1,11 +1,17 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../../../services/api"; 
-import type { Cartao, DespesasResponse } from "../types";
+import type { Cartao, DespesasResponse, FaturasSimplesResponse } from "../types";
 
 type FetchDespesasParams = {
     idCartao: number;
     mes?: number;
     ano?: number;
+    page?: number;
+    size?: number;
+}
+
+type FetchFaturasSimplesParams = {
+    idCartao: number;
     page?: number;
     size?: number;
 }
@@ -33,6 +39,23 @@ export const fetchDespesasThunk = createAsyncThunk(
 
         const { data } = await api.get<DespesasResponse>(`/cartao/despesas/${idCartao}`, {
             params: params
+        });
+        return data;
+    }
+);
+
+
+export const fetchFaturasSimplesThunk = createAsyncThunk(
+    "cartao/fetchFaturasSimples",
+    async ({ idCartao, page = 0, size = 100 }: FetchFaturasSimplesParams) => {
+
+        const params: Record<string, any> = {
+            page,
+            size,
+        };
+
+        const { data } = await api.get<FaturasSimplesResponse>(`/cartao/fatura-simples/${idCartao}`, {
+            params
         });
         return data;
     }
