@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchCartoesThunk, fetchDespesasThunk } from "../services/cartaoThunks";
+import { fetchCartoesThunk, fetchDespesasThunk, fetchFaturasSimplesThunk } from "../services/cartaoThunks";
 import type { CartaoState } from "../types";
 
 const initialState: CartaoState = {
@@ -15,6 +15,16 @@ const initialState: CartaoState = {
     },
     loadingDespesas: false,
     errorDespesas: null,
+
+    faturasSimples: {
+        content: [],
+        currentPage: 0,
+        pageSize: 0,
+        totalPages: 0,
+        totalElements: 0,
+    },
+    loadingFaturas: false,
+    errorFaturas: null,
 };
 
 
@@ -26,6 +36,10 @@ const cartaoSlice = createSlice({
         clearDespesas: (state) => {
             state.despesas = initialState.despesas;
             state.errorDespesas = null;
+        },
+        clearFaturasSimples: (state) => {
+            state.faturasSimples = initialState.faturasSimples;
+            state.errorFaturas = null;
         }
     },
     extraReducers: (builder) => {
@@ -55,10 +69,23 @@ const cartaoSlice = createSlice({
             .addCase(fetchDespesasThunk.rejected, (state, action) => {
                 state.loadingDespesas = false;
                 state.errorDespesas = action.error.message ?? "Erro ao buscar despesas.";
+            })
+            // REDUCER FATURAS SIMPLES
+            .addCase(fetchFaturasSimplesThunk.pending, (state) => {
+                state.loadingFaturas = true;
+                state.errorFaturas = null;
+            })
+            .addCase(fetchFaturasSimplesThunk.fulfilled, (state, action) => {
+                state.loadingFaturas = false;
+                state.faturasSimples = action.payload;
+            })
+            .addCase(fetchFaturasSimplesThunk.rejected, (state, action) => {
+                state.loadingFaturas = false;
+                state.errorFaturas = action.error.message ?? "Erro ao buscar faturas.";
             });
     },
 });
 
-export const { clearDespesas } = cartaoSlice.actions;
+export const { clearDespesas, clearFaturasSimples } = cartaoSlice.actions;
 
 export default cartaoSlice.reducer;
