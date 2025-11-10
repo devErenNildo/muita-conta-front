@@ -18,17 +18,14 @@ export type Cartao = {
     cor: string;
 };
 
-// export type CartaoState = {
-//     cartoes: Cartao[];
-//     loading: boolean;
-//     error: string | null;
-
-//     despesas: Despesa[];
-//     loadingDespesas: boolean;
-//     errorDespesas: string | null;
-// };
+export type FaturaSimples = {
+    mes: number;
+    ano: number;
+    valorFatura: number;
+};
 
 export type DespesasResponse = PaginatedResponse<Despesa>;
+export type FaturasSimplesResponse = PaginatedResponse<FaturaSimples>;
 
 export type CartaoState = {
     cartoes: Cartao[];
@@ -38,4 +35,8 @@ export type CartaoState = {
     despesas: DespesasResponse; 
     loadingDespesas: boolean;
     errorDespesas: string | null;
+
+    faturasSimples: FaturasSimplesResponse;
+    loadingFaturas: boolean;
+    errorFaturas: string | null;
 }
