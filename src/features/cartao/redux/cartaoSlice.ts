@@ -75,9 +75,24 @@ const cartaoSlice = createSlice({
                 state.loadingFaturas = true;
                 state.errorFaturas = null;
             })
+            .addCase(fetchFaturasSimplesThunk.pending, (state) => {
+                state.loadingFaturas = true;
+                state.errorFaturas = null;
+            })
             .addCase(fetchFaturasSimplesThunk.fulfilled, (state, action) => {
                 state.loadingFaturas = false;
-                state.faturasSimples = action.payload;
+                state.faturasSimples.currentPage = action.payload.currentPage;
+                state.faturasSimples.totalPages = action.payload.totalPages;
+                state.faturasSimples.totalElements = action.payload.totalElements;
+                state.faturasSimples.pageSize = action.payload.pageSize;
+                if (action.meta.arg.page === 0) {
+                    state.faturasSimples.content = action.payload.content;
+                } else {
+                    state.faturasSimples.content = [
+                        ...state.faturasSimples.content,
+                        ...action.payload.content
+                    ];
+                }
             })
             .addCase(fetchFaturasSimplesThunk.rejected, (state, action) => {
                 state.loadingFaturas = false;
