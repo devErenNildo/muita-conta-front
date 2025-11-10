@@ -47,7 +47,7 @@ export const fetchDespesasThunk = createAsyncThunk(
 
 export const fetchFaturasSimplesThunk = createAsyncThunk(
     "cartao/fetchFaturasSimples",
-    async ({ idCartao, page = 0, size = 100 }: FetchFaturasSimplesParams) => {
+    async ({ idCartao, page = 0, size = 10 }: FetchFaturasSimplesParams) => {
 
         const params: Record<string, any> = {
             page,
