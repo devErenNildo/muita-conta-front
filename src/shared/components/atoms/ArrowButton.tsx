@@ -10,7 +10,7 @@ type Props = {
     onClick?: () => void;
 };
 
-const ArrowButton: React.FC<Props> = ({ direction, onClick, disable }) => {
+const ArrowButton = ({ direction, onClick, disable } : Props) => {
     
     const rotation = {
         direita: "0deg",

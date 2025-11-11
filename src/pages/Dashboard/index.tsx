@@ -7,7 +7,6 @@ import { clearDespesas } from '../../features/cartao/redux/cartaoSlice';
 import InvoiceHistory from '../../shared/components/organisms/InvoiceHistory';
 import CardPurchases from '../../shared/components/organisms/CardPurchases';
 import CardDetailsSidebar from '../../shared/components/organisms/CardDetailsSidebar';
-import BarChart from '../../shared/components/organisms/BarChart';
 
 const Dashboard = () => {
     const dispatch = useDispatch<AppDispatch>();
@@ -77,8 +76,7 @@ const Dashboard = () => {
                 <main className={styles.mainContent}>
 
                     {cartoes.length > 0 && (
-                        // <BarChart key={cartoes[currentIndex].id} idCartao={cartoes[currentIndex].id} />
-                        <InvoiceHistory />
+                        <InvoiceHistory key={cartoes[currentIndex].id} idCartao={cartoes[currentIndex].id}/>
 
                     )}
                     <CardPurchases
