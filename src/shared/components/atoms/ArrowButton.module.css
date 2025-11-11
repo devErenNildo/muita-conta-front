@@ -1,0 +1,47 @@
+.button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background-color: rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    color: var(--color-text);
+    transform: rotate(var(--rotation));
+}
+
+.button:hover {
+    transform: rotate(var(--rotation)) scale(1.05);
+    background-color: rgba(0, 0, 0, 0.1);
+    color: var(--color-link);
+}
+
+[data-theme="dark"] .button {
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+[data-theme="dark"] .button:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.button:disabled:hover {
+    transform: rotate(var(--rotation));
+    color: var(--color-text);
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+[data-theme="dark"] .button:disabled:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--color-text);
+}
