@@ -77,7 +77,8 @@ const Dashboard = () => {
                 <main className={styles.mainContent}>
 
                     {cartoes.length > 0 && (
-                        <BarChart key={cartoes[currentIndex].id} idCartao={cartoes[currentIndex].id} />
+                        // <BarChart key={cartoes[currentIndex].id} idCartao={cartoes[currentIndex].id} />
+                        <InvoiceHistory />
 
                     )}
                     <CardPurchases

@@ -3,11 +3,10 @@
     align-items: flex-end;
     justify-content: center;
     gap: 0.5rem;
-    width: 55vw;
 }
 
 .chartWrapper {
-    width: 100%;
+    width: calc(45vw + 64px);
     overflow: hidden;
     height: 200px;
 }
@@ -25,7 +24,7 @@
 
 .bar {
     background: linear-gradient(180deg, #4e8ef7, #1c3faa);
-    flex: 5vw;
+    width: 5vw;
     border-radius: 8px 8px 0 0;
     display: flex;
     align-items: flex-end;

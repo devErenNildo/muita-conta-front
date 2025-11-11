@@ -29,7 +29,7 @@ const BarChart: React.FC<Props> = ({ idCartao }) => {
         if (totalLoaded === 0) return;
 
         const hasMoreDataToFetch = faturasSimples.currentPage + 1 < faturasSimples.totalPages;
-
+        
         if (!hasMoreDataToFetch || loadingFaturas) {
             return;
         }
@@ -44,8 +44,14 @@ const BarChart: React.FC<Props> = ({ idCartao }) => {
     }, [pageAtual, faturasSimples, loadingFaturas, dispatch, idCartao]);
 
 
+    const totalLoaded = faturasSimples.content.length;
+
     const handleNext = () => {
-        setPageAtual((prev) => prev + 1);
+        const maxPage = Math.max(0, totalLoaded - BARS_PER_VIEW);
+        setPageAtual((prev) => {
+            const nextPage = prev + 1;
+            return Math.min(nextPage, maxPage);
+        });
     };
 
     const handlePrev = () => {
@@ -57,14 +63,12 @@ const BarChart: React.FC<Props> = ({ idCartao }) => {
             ? Math.max(...faturasSimples.content.map((f) => f.valorFatura))
             : 0;
 
-    const totalLoaded = faturasSimples.content.length;
-    const hasMoreDataOnServer = faturasSimples.currentPage + 1 < faturasSimples.totalPages;
-
     const maxPossiblePage = Math.max(0, totalLoaded - BARS_PER_VIEW);
-
     const isAtLoadedEnd = pageAtual >= maxPossiblePage;
-
+    const hasMoreDataOnServer = faturasSimples.currentPage + 1 < faturasSimples.totalPages;
     const isNextDisabled = isAtLoadedEnd && (loadingFaturas || !hasMoreDataOnServer);
+
+    const preciseTransform = `translateX(calc(-${pageAtual} * (5vw + 8px)))`;
 
     return (
         <div className={styles.container}>
@@ -80,7 +84,7 @@ const BarChart: React.FC<Props> = ({ idCartao }) => {
                 <div
                     className={styles.chartContainer}
                     style={{
-                        transform: `translateX(-${pageAtual * (100 / BARS_PER_VIEW)}%)`,
+                        transform: preciseTransform,
                     }}
                 >
                     {faturasSimples.content.map((fatura, index) => {
