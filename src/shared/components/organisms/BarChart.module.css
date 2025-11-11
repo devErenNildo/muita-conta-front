@@ -1,62 +1,66 @@
 .container {
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  gap: 0.5rem;
-  width: 100%;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 55vw;
+}
+
+.chartWrapper {
+    width: 100%;
+    overflow: hidden;
+    height: 200px;
 }
 
 .chartContainer {
-  display: flex;
-  align-items: flex-end;
-  justify-content: flex-start;
-  height: 200px;
-  width: 100%;
-  overflow: hidden;
-  gap: 8px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-start;
+    height: 100%;
+    gap: 8px;
+    transition: transform 0.6s ease-in-out;
+    width: max-content;
+    flex-wrap: nowrap;
 }
 
 .bar {
-  background: linear-gradient(180deg, #4e8ef7, #1c3faa);
-  width: calc((100% / 9) - 6px);
-  border-radius: 8px 8px 0 0;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  transition: all 0.3s ease;
-  position: relative;
+    background: linear-gradient(180deg, #4e8ef7, #1c3faa);
+    flex: 5vw;
+    border-radius: 8px 8px 0 0;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    transition: all 0.3s ease;
+    position: relative;
+    flex-shrink: 0;
 }
 
 .bar:hover {
-  background: linear-gradient(180deg, #6fa8ff, #274dbe);
-  transform: scale(1.05);
-}
-
-.lastHalf {
-  width: calc((100% / 9) / 2); /* metade da última barra */
+    background: linear-gradient(180deg, #6fa8ff, #274dbe);
+    transform: scale(1.05);
 }
 
 .label {
-  font-size: 0.7rem;
-  color: white;
-  margin-bottom: 4px;
-  font-weight: bold;
+    font-size: 0.7rem;
+    color: white;
+    margin-bottom: 4px;
+    font-weight: bold;
 }
 
 .arrowButton {
-  background: transparent;
-  border: none;
-  font-size: 1.8rem;
-  cursor: pointer;
-  color: #555;
-  transition: color 0.2s;
+    background: transparent;
+    border: none;
+    font-size: 1.8rem;
+    cursor: pointer;
+    color: #555;
+    transition: color 0.2s;
 }
 
 .arrowButton:hover:not(:disabled) {
-  color: #1c3faa;
+    color: #1c3faa;
 }
 
 .arrowButton:disabled {
-  opacity: 0.3;
-  cursor: not-allowed;
+    opacity: 0.3;
+    cursor: not-allowed;
 }

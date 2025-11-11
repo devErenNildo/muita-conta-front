@@ -56,18 +56,21 @@
     transform: translateX(0) scale(1);
     opacity: 1;
     z-index: 10;
+    pointer-events: auto;
 }
 
 .cardWrapper.prev {
     transform: translateX(-100%) scale(0.85);
     opacity: 0;
     z-index: 9;
+    pointer-events: none;
 }
 
 .cardWrapper.next {
     transform: translateX(40px) scale(0.9);
     opacity: 0;
     z-index: 8;
+    pointer-events: none;
 }
 
 .cardWrapper.next[style*="--index: 1"] {

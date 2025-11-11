@@ -13,16 +13,14 @@ const Dashboard = () => {
     const dispatch = useDispatch<AppDispatch>();
 
     const [currentIndex, setCurrentIndex] = useState(0);
-    // "Levantamos" o estado da aba para o Dashboard
     const [activeTab, setActiveTab] = useState('atual');
-    // Estado para controlar a página (ainda não temos "load more", mas usamos para a busca)
     const [currentPage, setCurrentPage] = useState(0);
 
     const {
         cartoes,
         loading: loadingCartoes,
         error: errorCartoes,
-        despesas, // Agora é o objeto DespesasResponse
+        despesas, 
         loadingDespesas,
         errorDespesas
     } = useSelector((state: RootState) => state.cartao);
@@ -35,12 +33,10 @@ const Dashboard = () => {
         setCurrentIndex(0);
     }, [cartoes.length]);
 
-    // useEffect atualizado para buscar despesas
     useEffect(() => {
         const activeCard = cartoes.length > 0 ? cartoes[currentIndex] : null;
 
         if (activeCard) {
-            // Prepara os parâmetros para o thunk
             const params: {
                 idCartao: number;
                 page: number;
@@ -51,27 +47,23 @@ const Dashboard = () => {
                 page: currentPage
             };
 
-            // Adiciona mes/ano apenas se a aba for 'atual'
             if (activeTab === 'atual') {
                 const date = new Date();
                 params.mes = date.getMonth() + 1;
                 params.ano = date.getFullYear();
             }
-            // Se a aba for 'todas', mes/ano não são enviados e a API trará tudo (paginado)
 
             dispatch(fetchDespesasThunk(params));
         } else {
             dispatch(clearDespesas());
         }
-        // Dispara a busca quando o cartão, a aba ou a página mudam
     }, [dispatch, cartoes, currentIndex, activeTab, currentPage]);
 
 
-    // Handler para gerenciar a mudança de aba
     const handleTabChange = (tab: string) => {
         setActiveTab(tab);
-        setCurrentPage(0);      // Reseta a paginação
-        dispatch(clearDespesas()); // Limpa as despesas antigas antes da nova busca
+        setCurrentPage(0);
+        dispatch(clearDespesas()); 
     };
 
     return (
@@ -83,18 +75,15 @@ const Dashboard = () => {
 
             <div className={styles.contentLayout}>
                 <main className={styles.mainContent}>
-                    {/* <InvoiceHistory /> */}
 
                     {cartoes.length > 0 && (
-                        <BarChart idCartao={cartoes[currentIndex].id} />
+                        <BarChart key={cartoes[currentIndex].id} idCartao={cartoes[currentIndex].id} />
+
                     )}
                     <CardPurchases
-                        // Passamos apenas o 'content' para o componente de exibição
                         despesas={despesas.content}
-                        // Só mostra o 'carregando' principal na primeira página
                         loading={loadingDespesas && currentPage === 0}
                         error={errorDespesas}
-                        // Passa o estado e o handler para o componente
                         activeTab={activeTab}
                         onTabChange={handleTabChange}
                     />
