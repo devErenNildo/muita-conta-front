@@ -13,6 +13,9 @@
     --color-button-bg: #f9f9f9;
     --color-link: #646cff;
     --color-link-hover: #747bff;
+    --color-blue-primary: #7b98f0;
+    --color-blue-secondary: #528dec;
+
 
     --color-nav-glass-bg: rgba(255, 255, 255, 0.2);
     --color-nav-border: rgba(255, 255, 255, 0.37);
@@ -37,6 +40,9 @@
     --color-nav-active-bg: rgba(0, 0, 0, 0.25);
     --color-nav-active-border: rgba(255, 255, 255, 0.1);
     --color-nav-active-shadow: rgba(0, 0, 0, 0.1);
+
+    --color-blue-primary: #4e8ef7;
+    --color-blue-secondary: #1c3faa;
 }
 
 body {
