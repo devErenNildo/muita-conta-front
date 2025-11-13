@@ -7,6 +7,13 @@ type Props = {
     maxValor: number;
 }
 
+const formatCurrency = (value: number) => {
+    return new Intl.NumberFormat('pt-BR', {
+        style: 'currency',
+        currency: 'BRL',
+    }).format(value);
+};
+
 const BarChart = ({data, transform, maxValor} : Props) => {
     return (
         <div className={styles.container}>
@@ -22,15 +29,21 @@ const BarChart = ({data, transform, maxValor} : Props) => {
                         : 0;
 
                     return(
-                        <div
+                        <div 
                             key={`${item.mes}-${item.ano}-${index}`}
-                            className={styles.bar}
-                            style={{ height: `${altura}%`}} 
-                            title={`${item.mes}/${item.ano} - R$ ${item.valorFatura.toFixed(2)}`}
+                            className={styles.barWrapper}
+                            data-tooltip={formatCurrency(item.valorFatura)}
                         >
-                            <span className={styles.label}>
-                                {item.mes}/{String(item.ano).slice(-2)}
-                            </span>
+                            <div className={styles.fullHeightTrack} />
+
+                            <div
+                                className={styles.bar}
+                                style={{ height: `${altura}%`}} 
+                            >
+                                <span className={styles.label}>
+                                    {item.mes}/{String(item.ano).slice(-2)}
+                                </span>
+                            </div>
                         </div>
                     );
                 })}

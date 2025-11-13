@@ -1,6 +1,15 @@
 .container {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     gap: 0.5rem;
+    width: 100%;
+}
+
+.chartWrapper {
+    flex: 1;
+    overflow: hidden;
+    margin: 0 8px;
+    display: block;
+    min-width: 0; 
 }

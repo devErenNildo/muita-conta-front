@@ -5,13 +5,14 @@ import BarChart from '../molecules/BarChart';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchFaturasSimplesThunk } from "../../../features/cartao/services/cartaoThunks";
 import type { AppDispatch, RootState } from "../../../app/store";
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 
 type Props = {
     idCartao: number;
 };
 
-const BARS_PER_VIEW = 9;
+const BAR_WIDTH_PX = 60;
+const GAP_PX = 12;
 const PREFETCH_TRIGGER_BARS_LEFT = 2;
 
 const InvoiceHistory = ({ idCartao }: Props) => {
@@ -21,6 +22,23 @@ const InvoiceHistory = ({ idCartao }: Props) => {
     );
 
     const [pageAtual, setPageAtual] = useState(0);
+    const [barsPerView, setBarsPerView] = useState(9);
+    const chartWrapperRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        const calculateBars = () => {
+            if (chartWrapperRef.current) {
+                const width = chartWrapperRef.current.offsetWidth;
+                const count = Math.floor((width + GAP_PX) / (BAR_WIDTH_PX + GAP_PX));
+                setBarsPerView(count > 0 ? count : 1);
+            }
+        };
+
+        calculateBars();
+
+        window.addEventListener('resize', calculateBars);
+        return () => window.removeEventListener('resize', calculateBars);
+    }, []);
 
     useEffect(() => {
         dispatch(fetchFaturasSimplesThunk({ idCartao, page: 0, size: 10 }));
@@ -37,19 +55,19 @@ const InvoiceHistory = ({ idCartao }: Props) => {
             return;
         }
 
-        const remainingBars = totalLoaded - (pageAtual + BARS_PER_VIEW);
+        const remainingBars = totalLoaded - (pageAtual + barsPerView);
 
         if (remainingBars <= PREFETCH_TRIGGER_BARS_LEFT) {
             const nextPageToFetch = faturasSimples.currentPage + 1;
             dispatch(fetchFaturasSimplesThunk({ idCartao, page: nextPageToFetch, size: 10 }));
         }
 
-    }, [pageAtual, faturasSimples, loadingFaturas, dispatch, idCartao]);
+    }, [pageAtual, faturasSimples, loadingFaturas, dispatch, idCartao, barsPerView]);
 
     const totalLoaded = faturasSimples.content.length;
 
     const handleNext = () => {
-        const maxPage = Math.max(0, totalLoaded - BARS_PER_VIEW);
+        const maxPage = Math.max(0, totalLoaded - barsPerView);
         setPageAtual((prev) => {
             const nextPage = prev + 1;
             return Math.min(nextPage, maxPage);
@@ -64,12 +82,12 @@ const InvoiceHistory = ({ idCartao }: Props) => {
         ? Math.max(...faturasSimples.content.map((f) => f.valorFatura))
         : 0;
 
-    const maxPossiblePage = Math.max(0, totalLoaded - BARS_PER_VIEW);
+    const maxPossiblePage = Math.max(0, totalLoaded - barsPerView);
     const isAtLoadedEnd = pageAtual >= maxPossiblePage;
     const hasMoreDataOnServer = faturasSimples.currentPage + 1 < faturasSimples.totalPages;
     const isNextDisabled = isAtLoadedEnd && (loadingFaturas || !hasMoreDataOnServer);
 
-    const preciseTransform = `translateX(calc(-${pageAtual} * (5vw + 8px)))`;
+    const preciseTransform = `translateX(calc(-${pageAtual} * (${BAR_WIDTH_PX}px + ${GAP_PX}px)))`;
 
     return (
         <div className={stylesContainer.widgetCard}>
@@ -84,11 +102,15 @@ const InvoiceHistory = ({ idCartao }: Props) => {
                         onClick={handlePrev}
                         disable={pageAtual === 0}
                     />
-                    <BarChart
-                        transform={preciseTransform}
-                        data={faturasSimples}
-                        maxValor={maxValor}
-                    />
+                    
+                    <div className={styles.chartWrapper} ref={chartWrapperRef}>
+                        <BarChart
+                            transform={preciseTransform}
+                            data={faturasSimples}
+                            maxValor={maxValor}
+                        />
+                    </div>
+
                     <ArrowButton
                         direction='direita'
                         onClick={handleNext}
