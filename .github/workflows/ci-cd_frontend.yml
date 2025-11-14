@@ -1,0 +1,159 @@
+name: CI/CD Frontend
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  DOCKER_REGISTRY: registry.muitaconta.com.br
+  IMAGE_NAME: muita-conta-front
+  DEVOPS_REPO: devErenNildo/muita-conta_devops
+  FRONT_APPS_DIR: k3s/applications/frontend
+  FRONT_INDEX_FILE: k3s/index/frontend-app.yaml
+  MAJOR_VERSION: '1'
+  KEEP_LAST_IMAGES: 4
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout do repositório (Frontend)
+        uses: actions/checkout@v4
+
+      - name: Instalar yq (para editar YAML)
+        run: |
+          sudo wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/bin/yq
+          sudo chmod +x /usr/bin/yq
+          yq --version
+
+      - name: Login no Docker Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.DOCKER_REGISTRY }}
+          username: ${{ secrets.DOCKER_REGISTRY_USER }}
+          password: ${{ secrets.DOCKER_REGISTRY_PASSWORD }}
+
+      - name: Gerar Tag da Imagem
+        run: |
+          echo "Buscando a última tag da versão ${{ env.MAJOR_VERSION }}.x no registry..."
+          
+          LATEST_TAG=$( \
+            curl -s -u "${{ secrets.DOCKER_REGISTRY_USER }}:${{ secrets.DOCKER_REGISTRY_PASSWORD }}" \
+            "https://${{ env.DOCKER_REGISTRY }}/v2/${{ env.IMAGE_NAME }}/tags/list" \
+            | jq -r '.tags[] | select(test("^${{ env.MAJOR_VERSION }}\\."))' \
+            | sort -V -r | head -n 1 \
+          )
+          
+          if [ -z "${LATEST_TAG}" ]; then
+            echo "Nenhuma tag anterior encontrada. Iniciando a versão em ${{ env.MAJOR_VERSION }}.0"
+            NEW_TAG="${{ env.MAJOR_VERSION }}.0"
+          else
+            echo "Última tag encontrada: ${LATEST_TAG}"
+            PATCH_NUM=$(echo "${LATEST_TAG}" | awk -F. '{print $2}')
+            NEW_PATCH_NUM=$((PATCH_NUM + 1))
+            NEW_TAG="${{ env.MAJOR_VERSION }}.${NEW_PATCH_NUM}"
+          fi
+          
+          echo "Nova tag de imagem gerada: ${NEW_TAG}"
+          echo "IMAGE_TAG=${NEW_TAG}" >> $GITHUB_ENV
+
+      - name: Build e Push da Imagem Docker
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: |
+            ${{ env.DOCKER_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+            ${{ env.DOCKER_REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+          build-args: |
+            VITE_API_BASE_URL=https://api.muitaconta.com.br
+
+      - name: Limpar Imagens Antigas
+        run: |
+          echo "Iniciando limpeza de imagens antigas... mantendo as últimas ${{ env.KEEP_LAST_IMAGES }} da versão ${{ env.MAJOR_VERSION }}.x"
+          
+          TAGS_TO_CHECK=$( \
+            curl -s -u "${{ secrets.DOCKER_REGISTRY_USER }}:${{ secrets.DOCKER_REGISTRY_PASSWORD }}" \
+            "https://${{ env.DOCKER_REGISTRY }}/v2/${{ env.IMAGE_NAME }}/tags/list" \
+            | jq -r '.tags[] | select(. != "latest" and test("^${{ env.MAJOR_VERSION }}\\."))' \
+            | sort -V -r \
+          )
+          
+          TAGS_TO_DELETE=$(echo "${TAGS_TO_CHECK}" | tail -n +$((${{ env.KEEP_LAST_IMAGES }} + 1)))
+          
+          if [ -z "${TAGS_TO_DELETE}" ]; then
+            echo "Nenhuma imagem antiga para deletar."
+            exit 0
+          fi
+          
+          echo "As seguintes tags serão deletadas: ${TAGS_TO_DELETE}"
+          
+          for tag in ${TAGS_TO_DELETE}; do
+            echo "Deletando tag: $tag"
+            DIGEST=$( \
+              curl -s -I -u "${{ secrets.DOCKER_REGISTRY_USER }}:${{ secrets.DOCKER_REGISTRY_PASSWORD }}" \
+              -H "Accept: application/vnd.docker.distribution.manifest.v2+json" \
+              "https://${{ env.DOCKER_REGISTRY }}/v2/${{ env.IMAGE_NAME }}/manifests/$tag" \
+              | grep -i 'Docker-Content-Digest' | awk '{print $2}' | tr -d '\r' \
+            )
+            
+            if [ -z "$DIGEST" ]; then
+              echo "Erro: Não foi possível obter o digest para a tag $tag. Pulando."
+              continue
+            fi
+            
+            curl -s -X DELETE \
+            -u "${{ secrets.DOCKER_REGISTRY_USER }}:${{ secrets.DOCKER_REGISTRY_PASSWORD }}" \
+            "https://${{ env.DOCKER_REGISTRY }}/v2/${{ env.IMAGE_NAME }}/manifests/$DIGEST"
+            
+            echo "Tag $tag (Digest: $DIGEST) marcada para deleção."
+          done
+          echo "Limpeza (soft delete) concluída."
+
+      - name: Clone do repositório de DevOps
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ env.DEVOPS_REPO }}
+          token: ${{ secrets.DEVOPS_REPO_PAT }}
+          path: k3s-repo
+          ref: main
+
+      - name: Atualizar Deployment e Sincronizar Manifestos do Frontend
+        run: |
+          cd k3s-repo
+          git pull origin main --rebase
+
+          echo "Sincronizando manifestos da aplicação frontend..."
+          mkdir -p applications/frontend
+          rsync -av --delete --exclude='.git' ../${{ env.FRONT_APPS_DIR }}/ ./applications/frontend/
+
+          echo "Sincronizando o manifesto frontend-app.yaml em index..."
+          cp -f ../${{ env.FRONT_INDEX_FILE }} ./index/frontend-app.yaml
+
+          echo "Atualizando a tag da imagem no deployment.yaml..."
+          
+          DEPLOYMENT_FILE="./applications/frontend/deployment.yaml"
+          NEW_IMAGE_URL="${{ env.DOCKER_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}"
+          
+          yq e '(.spec.template.spec.containers[] | select(.name == "${{ env.IMAGE_NAME }}")).image = "'${NEW_IMAGE_URL}'"' -i ${DEPLOYMENT_FILE}
+          
+          echo "Arquivo ${DEPLOYMENT_FILE} atualizado para usar a imagem ${NEW_IMAGE_URL}"
+          
+          COMMIT_MESSAGE="Sync: Manifestos K8s | Deploy Front: ${{ env.IMAGE_TAG }} [ci skip]"
+
+          echo "Verificando alterações..."
+          if [[ -n $(git status --porcelain applications/frontend index/frontend-app.yaml) ]]; then
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git config user.name "GitHub Actions"
+            
+            git add applications/frontend index/frontend-app.yaml
+            
+            git commit -m "${COMMIT_MESSAGE}"
+            git push origin HEAD:main
+            echo "Manifestos do frontend atualizados e enviados com sucesso!"
+          else
+            echo "Nenhuma alteração detectada nos manifestos do frontend."
+          fi
+        shell: bash
