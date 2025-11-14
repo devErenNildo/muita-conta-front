@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: muita-conta-front-deployment
+  namespace: muita-conta-front 
+  labels:
+    app: muita-conta-front
+spec:
+  replicas: 1
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      app: muita-conta-front
+  template:
+    metadata:
+      labels:
+        app: muita-conta-front
+    spec:
+      imagePullSecrets:
+        - name: docker-registry-credentials
+      containers:
+        - name: muita-conta-front
+          image: registry.muitaconta.com.br/muita-conta-front:latest
+          ports:
+            - containerPort: 3000
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "300m"
+              memory: "512Mi"
