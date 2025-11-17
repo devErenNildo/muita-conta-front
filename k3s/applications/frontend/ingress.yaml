@@ -1,0 +1,35 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: muita-conta-front-ingress
+  namespace: muita-conta-front
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - muitaconta.com.br 
+        - www.muitaconta.com.br
+      secretName: muita-conta-front-tls
+  rules:
+    - host: muitaconta.com.br
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: muita-conta-front-service
+                port:
+                  number: 80 
+    - host: www.muitaconta.com.br
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: muita-conta-front-service
+                port:
+                  number: 80
