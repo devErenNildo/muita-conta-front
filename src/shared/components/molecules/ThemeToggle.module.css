@@ -1,0 +1,90 @@
+[data-theme="dark"] .toggleButton {
+    width: 130px; 
+    height: 50px;
+    padding: 5px;
+    gap: 0;
+    justify-content: center;
+    position: relative;
+    display: flex;
+    align-items: center;
+    align-self: center;
+    border-radius: 25px;
+    font-family: inherit;
+    background-color: var(--color-nav-glass-bg);
+    border: 1px solid var(--color-nav-border);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 4px 12px rgba(146, 146, 146, 0.08);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: var(--color-text);
+}
+
+[data-theme="light"] .toggleButton {
+    width: 130px; 
+    height: 50px;
+    padding: 5px;
+    gap: 0;
+    justify-content: flex-start;
+    position: relative;
+    display: flex;
+    align-items: center;
+    align-self: center;
+    border-radius: 25px;
+    font-family: inherit;
+    background-color: var(--color-nav-glass-bg);
+    border: 1px solid var(--color-nav-border);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: var(--color-text);
+}
+
+.toggleButton:hover {
+    border-color: var(--color-link);
+    background-color: var(--color-nav-glass-bg);
+    color: var(--color-text);
+}
+
+.thumb {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5em;
+    background-color: var(--color-nav-active-bg);
+    border: 1px solid var(--color-nav-border);
+    box-shadow: 0 2px 8px var(--color-nav-active-shadow);
+    color: var(--color-nav-icon-active);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.label {
+    position: absolute;
+    font-size: 0.9em;
+    font-weight: 600;
+    color: var(--color-text);
+    pointer-events: none;
+    transition: all 0.3s ease;
+}
+
+.light .thumb {
+    transform: translate(0, -5%);
+}
+.light .label {
+    left: 55px;
+}
+
+.dark .thumb {
+    transform: translate(80px, -5%); 
+}
+.dark .label {
+    left: 15px;
+}
