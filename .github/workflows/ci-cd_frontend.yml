@@ -122,15 +122,20 @@ jobs:
 
       - name: Injetar secret do docker registry no arquivo image-pull-secret
         run: |
-          SECRET_FILE="k3s-repo/applications/frontend/docker-registry-secret.yaml"
+          SECRET_FILE="k3s-repo/applications/frontend/image-pull-secret.yaml"
+          NEW_SECRET_VALUE=${{ secrets.DOCKER_REGISTRY_BASE64 }}
 
-          SECRET_DOCKER_REGISTRY=${{ secrets.DOCKER_REGISTRY_BASE64 }}
-
-          echo "Injetando .dockerconfigjson secreto no arquivo: $SECRET_FILE"
-
-          yq e '.data.".dockerconfigjson" = "'"$SECRET_DOCKER_REGISTRY"'"' -i "$SECRET_FILE"
-
-          echo "Secret atualizado"
+          echo "Verificando secret do Docker Registry em: $SECRET_FILE"
+          
+          CURRENT_SECRET_VALUE=$(yq e '.data.".dockerconfigjson"' $SECRET_FILE)
+          
+          if [ "$CURRENT_SECRET_VALUE" != "$NEW_SECRET_VALUE" ]; then
+            echo "Secret desatualizado. Injetando novo .dockerconfigjson..."
+            yq e '.data.".dockerconfigjson" = "'"$NEW_SECRET_VALUE"'"' -i "$SECRET_FILE"
+            echo "Secret atualizado."
+          else
+            echo "Secret já está atualizado. Nenhuma alteração."
+          fi
 
       - name: Atualizar Deployment e Sincronizar Manifestos do Frontend
         run: |
@@ -138,7 +143,7 @@ jobs:
           git pull origin main --rebase
 
           echo "Sincronizando manifestos da aplicação frontend..."
-          mkdir -p applications/frontendx 
+          mkdir -p applications/frontend
           rsync -av --delete --exclude='.git' ../${{ env.FRONT_APPS_DIR }}/ ./applications/frontend/
 
           echo "Sincronizando o manifesto frontend-app.yaml em index..."
@@ -148,19 +153,25 @@ jobs:
           
           DEPLOYMENT_FILE="./applications/frontend/deployment.yaml"
           NEW_IMAGE_URL="${{ env.DOCKER_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}"
+
+          CURRENT_IMAGE_URL=$(yq e '(.spec.template.spec.containers[] | select(.name == "${{ env.IMAGE_NAME }}")).image' ${DEPLOYMENT_FILE})
           
-          yq e '(.spec.template.spec.containers[] | select(.name == "${{ env.IMAGE_NAME }}")).image = "'${NEW_IMAGE_URL}'"' -i ${DEPLOYMENT_FILE}
-          
-          echo "Arquivo ${DEPLOYMENT_FILE} atualizado para usar a imagem ${NEW_IMAGE_URL}"
+          if [ "$CURRENT_IMAGE_URL" != "$NEW_IMAGE_URL" ]; then
+            echo "Nova tag de imagem detectada ($NEW_IMAGE_URL). Atualizando deployment.yaml..."
+            yq e '(.spec.template.spec.containers[] | select(.name == "${{ env.IMAGE_NAME }}")).image = "'${NEW_IMAGE_URL}'"' -i ${DEPLOYMENT_FILE}
+            echo "Arquivo ${DEPLOYMENT_FILE} atualizado."
+          else
+            echo "Imagem no deployment.yaml já está atualizada ($CURRENT_IMAGE_URL). Nenhuma alteração."
+          fi
           
           COMMIT_MESSAGE="Sync: Manifestos K8s | Deploy Front: ${{ env.IMAGE_TAG }} [ci skip]"
 
           echo "Verificando alterações..."
-          if [[ -n $(git status --porcelain applications/frontend index/frontend-app.yaml applications/frontend/docker-registry-secret.yaml) ]]; then
+          if [[ -n $(git status --porcelain applications/frontend index/frontend-app.yaml applications/frontend/image-pull-secret.yaml) ]]; then
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git config user.name "GitHub Actions"
             
-            git add applications/frontend index/frontend-app.yaml applications/frontend/docker-registry-secret.yaml
+            git add applications/frontend index/frontend-app.yaml applications/frontend/image-pull-secret.yaml
             
             git commit -m "${COMMIT_MESSAGE}"
             git push origin HEAD:main
