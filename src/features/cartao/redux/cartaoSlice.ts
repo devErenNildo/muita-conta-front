@@ -1,5 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchCartoesThunk, fetchDespesasThunk, fetchFaturasSimplesThunk } from "../services/cartaoThunks";
+import {
+    fetchCartoesThunk,
+    fetchDespesasThunk,
+    fetchFaturasSimplesThunk,
+    addCartaoThunk
+} from "../services/cartaoThunks";
 import type { CartaoState } from "../types";
 
 const initialState: CartaoState = {
@@ -93,6 +98,18 @@ const cartaoSlice = createSlice({
             .addCase(fetchFaturasSimplesThunk.rejected, (state, action) => {
                 state.loadingFaturas = false;
                 state.errorFaturas = action.error.message ?? "Erro ao buscar faturas.";
+            })
+            // REDUCER ADICIONAR CARTÃO
+            .addCase(addCartaoThunk.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(addCartaoThunk.fulfilled, (state) => {
+                state.error = null;
+            })
+            .addCase(addCartaoThunk.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.error.message ?? "Erro ao adicionar cartão.";
             });
     },
 });
