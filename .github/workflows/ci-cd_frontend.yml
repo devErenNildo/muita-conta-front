@@ -120,13 +120,25 @@ jobs:
           path: k3s-repo
           ref: main
 
+      - name: Injetar secret do docker registry no arquivo image-pull-secret
+        run: |
+          SECRET_FILE="k3s-repo/applications/frontend/docker-registry-secret.yaml"
+
+          SECRET_DOCKER_REGISTRY=${{ secrets.DOCKER_REGISTRY_BASE64 }}
+
+          echo "Injetando .dockerconfigjson secreto no arquivo: $SECRET_FILE"
+
+          yq e '.data.".dockerconfigjson" = "'"$SECRET_DOCKER_REGISTRY"'"' -i "$SECRET_FILE"
+
+          echo "Secret atualizado"
+
       - name: Atualizar Deployment e Sincronizar Manifestos do Frontend
         run: |
           cd k3s-repo
           git pull origin main --rebase
 
           echo "Sincronizando manifestos da aplicação frontend..."
-          mkdir -p applications/frontend
+          mkdir -p applications/frontendx 
           rsync -av --delete --exclude='.git' ../${{ env.FRONT_APPS_DIR }}/ ./applications/frontend/
 
           echo "Sincronizando o manifesto frontend-app.yaml em index..."
@@ -144,11 +156,11 @@ jobs:
           COMMIT_MESSAGE="Sync: Manifestos K8s | Deploy Front: ${{ env.IMAGE_TAG }} [ci skip]"
 
           echo "Verificando alterações..."
-          if [[ -n $(git status --porcelain applications/frontend index/frontend-app.yaml) ]]; then
+          if [[ -n $(git status --porcelain applications/frontend index/frontend-app.yaml applications/frontend/docker-registry-secret.yaml) ]]; then
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git config user.name "GitHub Actions"
             
-            git add applications/frontend index/frontend-app.yaml
+            git add applications/frontend index/frontend-app.yaml applications/frontend/docker-registry-secret.yaml
             
             git commit -m "${COMMIT_MESSAGE}"
             git push origin HEAD:main
