@@ -3,6 +3,7 @@ import NavLinks from '../atoms/NavLinks';
 import ThemeToggle from './ThemeToggle';
 import styles from './MainLayout.module.css';
 import { NavLink } from 'react-router-dom';
+import logo from '../../../../public/logo.png';
 
 type Props = {
     children: React.ReactNode;
@@ -15,9 +16,14 @@ const MainLayout = ({ children }: Props) => {
             <aside className={styles.asideNav}>
 
                 <div className={styles.asideLogo}>
-                    <div className={styles.logoIcon}>F</div>
+                    <div className={styles.logoContainer}>
+                        <img
+                            src={logo} alt='Loogo de cartao de credito'
+                            className={styles.logo}
+                        />
+                    </div>
                     <div className={styles.logoTextContainer}>
-                        <h3 className={styles.logoTitle}>FinanceApp</h3>
+                        <h3 className={styles.logoTitle}>Muita Conta</h3>
                         <span className={styles.logoSubtitle}>Gestão Financeira</span>
                     </div>
                 </div>
