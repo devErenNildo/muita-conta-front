@@ -24,6 +24,16 @@ export type FaturaSimples = {
     valorFatura: number;
 };
 
+export type AddCartaoRequest = {
+    nome: string;
+    limite: number;
+    diaFechamento: number;
+    diaVencimento: number;
+    corHex: string;
+    limiteUsado: number;
+    parcelasSaldoAntigo: number;
+};
+
 export type DespesasResponse = PaginatedResponse<Despesa>;
 export type FaturasSimplesResponse = PaginatedResponse<FaturaSimples>;
 
