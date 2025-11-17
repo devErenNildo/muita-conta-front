@@ -2,7 +2,6 @@ import React from 'react';
 import NavLinks from '../atoms/NavLinks';
 import ThemeToggle from './ThemeToggle';
 import styles from './MainLayout.module.css';
-import { NavLink } from 'react-router-dom';
 import logo from '../../../../public/logo.png';
 
 type Props = {
@@ -34,15 +33,6 @@ const MainLayout = ({ children }: Props) => {
 
                 <footer className={styles.asideFooter}>
                     <ThemeToggle />
-                    <NavLink
-                        to="/configuracoes"
-                        className={({ isActive }) =>
-                            `${styles.footerLink} ${isActive ? styles.footerLinkActive : ''}`
-                        }
-                    >
-                        <span className={styles.footerIcon}>⚙️</span>
-                        <span className={styles.footerLabel}>Configurações</span>
-                    </NavLink>
                 </footer>
             </aside>
 

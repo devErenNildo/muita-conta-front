@@ -47,7 +47,7 @@
     }
 
     .asideNav {
-        display: flex;
+        /* display: flex;
         flex-direction: column;
         width: 240px;
         position: fixed;
@@ -60,7 +60,37 @@
         backdrop-filter: blur(20px);
         -webkit-backdrop-filter: blur(20px);
         border-right: 1px solid var(--color-nav-border);
+        color: var(--color-text); */
+        display: flex;
+        flex-direction: column;
+        width: 240px;
+        position: fixed;
+        padding: 1.5rem;
+        box-sizing: border-box;
         color: var(--color-text);
+        
+        /* Efeito glassmorphism (já existente) */
+        background-color: var(--color-nav-glass-bg);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+
+        /* === ALTERAÇÕES PARA O EFEITO FLUTUANTE === */
+        
+        /* 1. Definir o espaçamento (antes era 0) */
+        top: 1rem;
+        left: 1rem;
+        
+        /* 2. Ajustar altura para ter espaçamento inferior (antes era 100vh) */
+        height: calc(100vh - 2rem); 
+        
+        /* 3. Adicionar bordas arredondadas e sombra (como na imagem) */
+        border-radius: 24px; /* Novo */
+        
+        /* 4. Trocar borda da direita por borda completa (como no .bottomNav) */
+        border: 1px solid var(--color-nav-border); /* Antes: border-right */
+        
+        /* 5. Adicionar sombra (como no .bottomNav) */
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* Novo */
     }
 
     .asideLogo {
@@ -182,6 +212,6 @@
     .mainContent {
         padding-bottom: 0;
         flex-grow: 1;
-        margin-left: 240px;
+        margin-left: calc(240px + 2rem);
     }
 }

@@ -9,7 +9,6 @@ import {
     MdOutlineDashboard,
     MdTrendingDown,
     MdCreditCard,
-    MdTrendingUp,
 } from "react-icons/md";
 
 const navItems = [
@@ -18,7 +17,6 @@ const navItems = [
     { path: '/cartao', label: 'Cartões', icon: <MdCreditCard /> },
     { path: '/contas', label: 'Contas', icon: <LuFileText /> },
     { path: '/emprestimos', label: 'Empréstimos', icon: <LuPiggyBank /> },
-    { path: '/renda', label: 'Renda', icon: <MdTrendingUp /> },
     { path: '/perfil', label: 'Perfil', icon: <LuUser /> },
 ];
 
