@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../../../services/api"; 
-import type { Cartao, DespesasResponse, FaturasSimplesResponse } from "../types";
+import type { AddCartaoRequest, Cartao, DespesasResponse, FaturasSimplesResponse } from "../types";
 
 type FetchDespesasParams = {
     idCartao: number;
@@ -60,3 +60,12 @@ export const fetchFaturasSimplesThunk = createAsyncThunk(
         return data;
     }
 );
+
+export const addCartaoThunk = createAsyncThunk(
+    "cartao/add",
+    async (newCartaoData: AddCartaoRequest, { dispatch }) => {
+        await api.post("cartao/adicionar", newCartaoData);
+        dispatch(fetchCartoesThunk());
+        return;
+    }
+)
