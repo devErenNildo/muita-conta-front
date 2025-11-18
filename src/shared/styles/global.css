@@ -17,8 +17,8 @@
     --color-blue-secondary: #528dec;
 
 
-    --color-nav-glass-bg: rgba(255, 255, 255, 0.2);
-    --color-nav-border: rgba(221, 219, 219, 0.39);
+    --color-nav-glass-bg: rgba(255, 255, 255, 0.3);
+    --color-nav-border: rgba(85, 85, 85, 0.24);
     --color-nav-icon-inactive: #555555;
     --color-nav-icon-active: var(--color-link);
     --color-nav-active-bg: rgba(255, 255, 255, 0.5);
