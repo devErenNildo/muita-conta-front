@@ -1,0 +1,14 @@
+.fieldWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
+}
+
+.label {
+    font-size: 0.9em;
+    font-weight: 500;
+    color: var(--color-text);
+    opacity: 0.9;
+    padding-left: 0.25rem;
+}
