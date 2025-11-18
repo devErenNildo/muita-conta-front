@@ -38,36 +38,6 @@
     min-width: 0; 
 }
 
-.fab {
-    position: fixed;
-    bottom: 1.5rem;
-    right: 1.5rem;
-
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    background-color: var(--color-link);
-    color: white;
-    font-size: 2em;
-    font-weight: 300;
-    line-height: 1;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    border: none;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    cursor: pointer;
-    transition: all 0.2s ease;
-    z-index: 1000;
-}
-
-.fab:hover {
-    transform: scale(1.05);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
-}
-
 @media (min-width: 992px) {
     .contentLayout {
         grid-template-columns: 60% 30%;
@@ -85,16 +55,5 @@
         position: sticky;
         top: 2rem;
         width: 100%;
-    }
-
-    .fab {
-        bottom: 2.5rem;
-        right: 2.5rem;
-    }
-}
-
-@media (max-width: 767px) {
-    .fab {
-        bottom: 100px;
     }
 }
