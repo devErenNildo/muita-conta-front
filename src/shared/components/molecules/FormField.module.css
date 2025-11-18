@@ -12,3 +12,11 @@
     opacity: 0.9;
     padding-left: 0.25rem;
 }
+
+.errorMessage {
+    color: #ff6b6b;
+    font-size: 0.8em;
+    margin-top: 0.25rem;
+    padding-left: 0.25rem;
+    font-weight: 500;
+}
