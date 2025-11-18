@@ -19,6 +19,16 @@
     background-color: var(--color-nav-active-bg);
 }
 
+.input.error {
+    border-color: #ff6b6b;
+    background-color: rgba(255, 107, 107, 0.1);
+}
+
+.input.error:focus {
+    border-color: #ff4d4d;
+    box-shadow: 0 0 0 4px rgba(255, 77, 77, 0.1);
+}
+
 .input::placeholder {
     color: var(--color-text);
     opacity: 0.6;
