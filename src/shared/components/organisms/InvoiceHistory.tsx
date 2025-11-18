@@ -96,29 +96,39 @@ const InvoiceHistory = ({ idCartao }: Props) => {
                 Histórico de Faturas
             </h3>
             <div className={stylesContainer.content}>
-                <div className={styles.container}>
-                    <ArrowButton
-                        direction='esquerda'
-                        onClick={handlePrev}
-                        disable={pageAtual === 0}
-                    />
-                    
-                    <div className={styles.chartWrapper} ref={chartWrapperRef}>
-                        <BarChart
-                            transform={preciseTransform}
-                            data={faturasSimples}
-                            maxValor={maxValor}
-                        />
-                    </div>
 
-                    <ArrowButton
-                        direction='direita'
-                        onClick={handleNext}
-                        disable={isNextDisabled}
-                    />
-                </div>
+                {faturasSimples.content.length > 0 ?
+                    (
+                        <div className={styles.container}>
+                            <ArrowButton
+                                direction='esquerda'
+                                onClick={handlePrev}
+                                disable={pageAtual === 0}
+                            />
 
+                            <div className={styles.chartWrapper} ref={chartWrapperRef}>
+                                <BarChart
+                                    transform={preciseTransform}
+                                    data={faturasSimples}
+                                    maxValor={maxValor}
+                                />
+                            </div>
+
+                            <ArrowButton
+                                direction='direita'
+                                onClick={handleNext}
+                                disable={isNextDisabled}
+                            />
+                        </div>
+                    ) :
+                    (
+                        <div className={styles.emptyState}>
+                            Esse cartão não possui faturas
+                        </div>
+                    )
+                }
             </div>
+
         </div>
     );
 };
